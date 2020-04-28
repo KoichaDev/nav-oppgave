@@ -1,0 +1,25 @@
+{
+  "name": "nav-oppgave",
+  "version": "1.0.0",
+  "description": "Fødtselsdato oppgave til NAV",
+  "main": "app.js",
+  "scripts": {
+    "start": "lite-server",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KoichaDev/nav-oppgave.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KoichaDev/nav-oppgave/issues"
+  },
+  "homepage": "https://github.com/KoichaDev/nav-oppgave#readme",
+  "devDependencies": {
+    "jest": "^25.4.0",
+    "lite-server": "^2.5.4"
+  }
+}
