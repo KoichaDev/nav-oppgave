@@ -22,7 +22,7 @@ const validate = (digit) => {
     const elevenDigits = new RegExp('^[0-9]{11}$');
     if (!elevenDigits.test(parseInt(digit))) {
         return {
-            msg: 'Invalid',
+            msg: 'invalid',
             reason: 'Must be eleven digits'
         }
     }
@@ -78,15 +78,10 @@ const checkSum = (digit) => {
 
     checkSum.unshift(d1, d2, m1, m2, y1, y2, i1, i2, i3, k1, k2);
 
-    return (arrayEquals(checkSum, toNumberArr))
+    return (arrayEquals(checkSum, toNumberArr)) || { msg: 'invalid', status: 'The validation of the birth number  is not correct' }
 }
 
 console.log(checkSum(18081888015))
-
-
-
-
-
 
 module.exports = numbers;
 module.exports = dNr;
