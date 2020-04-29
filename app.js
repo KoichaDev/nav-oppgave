@@ -18,7 +18,7 @@ const iNr = (digit) => {
     return toString.substring(6, 9)
 }
 
-const validate = (digit) => {
+const validateBirthNumber = (digit) => {
     const elevenDigits = new RegExp('^[0-9]{11}$');
     if (!elevenDigits.test(parseInt(digit))) {
         return {
@@ -28,6 +28,26 @@ const validate = (digit) => {
     }
     return parseInt(digit);
 };
+
+
+const iNrValidation = (digits) => {
+    const toString = digits.toString();
+    const number = parseInt(toString.substring(6, 9))
+    switch (true) {
+        case (number < 499): return { msg: '000–499 omfatter personer født i perioden 1900–1999.' };
+        case (499 < number || number > 749): return { msg: '500–749 omfatter personer født i perioden 1854–1899.' }
+        case (500 < number || number > 999): return { msg: '500–999 omfatter personer født i perioden 2000–2039.' }
+        case (900 < number || number > 999): return { msg: '900–999 omfatter personer født i perioden 1940–1999.' }
+        default: return { msg: 'Mangler individ siffer' }
+
+    }
+}
+
+const isSex = (digit) => {
+    const toString = digit.toString();
+    const toDigit = parseInt(toString.substring(8, 9))
+    return toDigit % 2 == 0 && { msg: 'male' } || Math.abs(toDigit % 2) == 1 && { msg: 'female' }
+}
 
 const arrayEquals = (left, right) => {
     const { isArray } = Array;
@@ -52,7 +72,7 @@ const arrayEquals = (left, right) => {
 const checkSum = (digit) => {
     // 1. Array for input of birth digit
     // 2. Array for checkSum calculation
-    const input = [validate(digit)];
+    const input = [validateBirthNumber(digit)];
     const checkSum = [];
 
     // Manipulating input birth digit 
