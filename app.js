@@ -1,3 +1,5 @@
+const date = new Date();
+
 const numbers = (digit) => (digit);
 
 const dayNumber = (digit) => {
@@ -49,25 +51,49 @@ const validateBirthNumber = (digit) => {
             reason: 'Must be eleven digits'
         }
     }
-    return parseInt(digit);
+    return {
+        digits: parseInt(digit),
+        born: individualNumberValidation(digit).born,
+        isSex: isSex(digit)
+    }
 };
 
 const individualNumberValidation = (digits) => {
     const toString = digits.toString();
     const number = parseInt(toString.substring(6, 9))
     switch (true) {
-        case (number < 499): return { msg: '000–499 omfatter personer født i perioden 1900–1999.' };
-        case (499 < number || number > 749): return { msg: '500–749 omfatter personer født i perioden 1854–1899.' }
-        case (500 < number || number > 999): return { msg: '500–999 omfatter personer født i perioden 2000–2039.' }
-        case (900 < number || number > 999): return { msg: '900–999 omfatter personer født i perioden 1940–1999.' }
+        case (number < 499):
+            return {
+                born: `19${yearNumber(digits)}`,
+                individualNr: number,
+                msg: '000–499 omfatter personer født i perioden 1900–1999.'
+            };
+        case (499 < number || number > 749):
+            return {
+                born: `18${yearNumber(digits)}`,
+                individualNr: number,
+                msg: '500–749 omfatter personer født i perioden 1854–1899.'
+            }
+        case (500 < number || number > 999):
+            return {
+                born: `20${yearNumber(digits)}`,
+                individualNr: number,
+                msg: '500–999 omfatter personer født i perioden 2000–2039.'
+            }
+        case (900 < number || number > 999):
+            return {
+                born: `19${yearNumber(digits)}`,
+                individualNr: number,
+                msg: '900–999 omfatter personer født i perioden 1940–1999.'
+            }
         default: return { msg: 'Mangler individ siffer' }
     }
 }
 
 const isSex = (digit) => {
-    const toString = digit.toString();
-    const toDigit = parseInt(toString.substring(8, 9))
-    return toDigit % 2 == 0 && { msg: 'male' } || Math.abs(toDigit % 2) == 1 && { msg: 'female' }
+    const toString = individualNumberValidation(digit).individualNr.toString();
+    const toDigit = parseInt(toString.substring(2, 3))
+    return toDigit % 2 == 0 && { msg: 'female' } || Math.abs(toDigit % 2) == 1 && { msg: 'male' }
 }
 
 const arrayEquals = (left, right) => {
@@ -92,7 +118,7 @@ const arrayEquals = (left, right) => {
 const checkSum = (digit) => {
     // 1. Array for input of birth digit
     // 2. Array for checkSum calculation
-    const input = [validateBirthNumber(digit)];
+    const input = [validateBirthNumber(digit).digits];
     const checkSum = [];
 
     // Manipulating input birth digit 
@@ -116,7 +142,6 @@ const checkSum = (digit) => {
 
     return (arrayEquals(checkSum, toNumberArr))
 }
-console.log(checkSum(28126741741))
 
 export {
     numbers,

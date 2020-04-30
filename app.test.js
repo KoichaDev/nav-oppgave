@@ -48,7 +48,7 @@ describe('checking "checksum"', () => {
 
 
 test('expect if birth number number to be 11 digits', () => {
-    expect(validateBirthNumber(25108338752).toString()).toHaveLength(11)
+    expect(validateBirthNumber(25108338752).digits.toString()).toHaveLength(11)
 })
 
 test('expect to reject if birth number to be less than 11 digits', () => {
@@ -63,24 +63,24 @@ test('expect day/month/year digit to be 2 numbers', () => {
 })
 
 test('expect individual number to match the year number person is born', () => {
-    expect(individualNumberValidation(25108338852)).toStrictEqual({ "msg": "000–499 omfatter personer født i perioden 1900–1999." })
-    expect(individualNumberValidation(14051363788)).toStrictEqual({ "msg": "500–749 omfatter personer født i perioden 1854–1899." })
-    expect(individualNumberValidation(11059410646)).toStrictEqual({ "msg": "000–499 omfatter personer født i perioden 1900–1999." })
+    expect(individualNumberValidation(25108338852).individualNr).toBe(388)
+    expect(individualNumberValidation(14051363788).individualNr).toBe(637)
+    expect(individualNumberValidation(11059410646).individualNr).toBe(106)
 })
 
 describe('Checking which sex', () => {
-    it('expect odd number to be female', () => {
-        expect(isSex(25108338752)).toStrictEqual({ "msg": "female" })
+    it('expect odd number to be male', () => {
+        expect(isSex(25108338752)).toStrictEqual({ "msg": "male" })
     })
-    it('expect even number to be male', () => {
-        expect(isSex(25108338852)).toStrictEqual({ "msg": "male" })
+    it('expect even number to be female', () => {
+        expect(isSex(25108338852)).toStrictEqual({ "msg": "female" })
     })
-    it('expect odd number not to be female', () => {
-        expect(isSex(25108338752)).not.toStrictEqual({ "msg": "male" })
+    it('expect odd number not to be male', () => {
+        expect(isSex(25108338752)).not.toStrictEqual({ "msg": "female" })
     })
 
-    it('expect even number not to be male', () => {
-        expect(isSex(25108338852)).not.toStrictEqual({ "msg": "female" })
+    it('expect even number not to be female', () => {
+        expect(isSex(25108338852)).not.toStrictEqual({ "msg": "male" })
     })
 })
 
