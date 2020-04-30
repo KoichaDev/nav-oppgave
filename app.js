@@ -1,5 +1,21 @@
 const numbers = (digit) => (digit);
 
+const daysInMonth = (month, year) => {
+    switch (month) {
+        case 1:
+            return (year % 4 == 0 && year % 100) || year % 400 == 0 ? 29 : 28;
+        case 8: case 3: case 5: case 10:
+            return 30;
+        default:
+            return 31
+    }
+};
+
+const isValidDate = (day, month, year) => {
+    month = parseInt(month, 10) - 1;
+    return month >= 0 && month < 12 && day > 0 && day <= daysInMonth(month, year);
+};
+
 const dayNumber = (digit) => {
     const toString = numbers(digit).toString();
     return toString.substring(0, 2)
@@ -87,6 +103,14 @@ const validate = (digit) => {
             reason: 'Must be eleven digits'
         }
     }
+
+    if (isValidDate(dayNumber(digit), monthNumber(digit), yearNumber(digit)) === false) {
+        return {
+            msg: 'invalid',
+            reason: 'invalid day, month or year'
+        }
+    }
+
     return {
         digits: parseInt(digit),
         d1: parseInt(dayNumber(digit)[0]),
