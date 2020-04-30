@@ -6,7 +6,7 @@ import {
     individualNumber,
     kontrollDigit1,
     kontrollDigit2,
-    validateBirthNumber,
+    validate,
     isSex,
     individualNumberValidation,
     checkSum
@@ -48,11 +48,11 @@ describe('checking "checksum"', () => {
 
 
 test('expect if birth number number to be 11 digits', () => {
-    expect(validateBirthNumber(25108338752).digits.toString()).toHaveLength(11)
+    expect(validate(25108338752).digits.toString()).toHaveLength(11)
 })
 
 test('expect to reject if birth number to be less than 11 digits', () => {
-    expect(validateBirthNumber(2510833875).toString()).not.toHaveLength(11)
+    expect(validate(2510833875).toString()).not.toHaveLength(11)
 })
 
 test('expect day/month/year digit to be 2 numbers', () => {
@@ -62,10 +62,42 @@ test('expect day/month/year digit to be 2 numbers', () => {
     expect(typeof parseInt(individualNumber(25108338752))).toBe('number');
 })
 
-test('expect individual number to match the year number person is born', () => {
-    expect(individualNumberValidation(25108338852).individualNr).toBe(388)
-    expect(individualNumberValidation(14051363788).individualNr).toBe(637)
-    expect(individualNumberValidation(11059410646).individualNr).toBe(106)
+describe('expect individual number to match the year number person is born', () => {
+    it('expect individual number 388 to match the born digits', () => {
+        expect(individualNumberValidation(25108338852).individualNr).toBe(388)
+    })
+
+    it('expect individual number 637 to match the born digits', () => {
+        expect(individualNumberValidation(14051363788).individualNr).toBe(637)
+    })
+
+    it('expect individual number 106 to match the born digits', () => {
+        expect(individualNumberValidation(11059410646).individualNr).toBe(106)
+    })
+
+    it('expect individual number 388 not to match the born digits', () => {
+        expect(individualNumberValidation(25108332852).individualNr).not.toBe(388)
+    })
+
+    it('expect individual number 637 not to match the born digits', () => {
+        expect(individualNumberValidation(14051364788).individualNr).not.toBe(637)
+    })
+
+    it('expect individual number 106 not to match the born digits', () => {
+        expect(individualNumberValidation(11059450646).individualNr).not.toBe(106)
+    })
+
+    it('expect individual number to match the year number person is born 1900-1999', () => {
+        expect(individualNumberValidation(25108338852).msg).toStrictEqual("000–499 omfatter personer født i perioden 1900–1999.")
+    })
+
+    it('expect individual number to match the year number person is born 1854-1899', () => {
+        expect(individualNumberValidation(14051363788).msg).toStrictEqual("500–749 omfatter personer født i perioden 1854–1899.")
+    })
+
+    it('expect individual number to match the year number person is born 1900-1999', () => {
+        expect(individualNumberValidation(11059410646).msg).toStrictEqual("000–499 omfatter personer født i perioden 1900–1999.")
+    })
 })
 
 describe('Checking which sex', () => {

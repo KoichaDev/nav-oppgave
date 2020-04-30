@@ -1,5 +1,3 @@
-const date = new Date();
-
 const numbers = (digit) => (digit);
 
 const dayNumber = (digit) => {
@@ -43,44 +41,29 @@ const kontrollDigit2 = (digit) => {
     return k2;
 }
 
-const validateBirthNumber = (digit) => {
-    const elevenDigits = new RegExp('^[0-9]{11}$');
-    if (!elevenDigits.test(parseInt(digit))) {
-        return {
-            msg: 'invalid',
-            reason: 'Must be eleven digits'
-        }
-    }
-    return {
-        digits: parseInt(digit),
-        born: individualNumberValidation(digit).born,
-        isSex: isSex(digit)
-    }
-};
-
 const individualNumberValidation = (digits) => {
     const toString = digits.toString();
     const number = parseInt(toString.substring(6, 9))
     switch (true) {
-        case (number < 499):
+        case (number <= 499):
             return {
                 born: `19${yearNumber(digits)}`,
                 individualNr: number,
                 msg: '000–499 omfatter personer født i perioden 1900–1999.'
             };
-        case (499 < number || number > 749):
+        case (500 <= number && 749 >= number):
             return {
                 born: `18${yearNumber(digits)}`,
                 individualNr: number,
                 msg: '500–749 omfatter personer født i perioden 1854–1899.'
             }
-        case (500 < number || number > 999):
+        case (500 <= number && 999 >= number):
             return {
                 born: `20${yearNumber(digits)}`,
                 individualNr: number,
                 msg: '500–999 omfatter personer født i perioden 2000–2039.'
             }
-        case (900 < number || number > 999):
+        case (900 <= number && number >= 999):
             return {
                 born: `19${yearNumber(digits)}`,
                 individualNr: number,
@@ -95,6 +78,32 @@ const isSex = (digit) => {
     const toDigit = parseInt(toString.substring(2, 3))
     return toDigit % 2 == 0 && { msg: 'female' } || Math.abs(toDigit % 2) == 1 && { msg: 'male' }
 }
+
+const validate = (digit) => {
+    const elevenDigits = new RegExp('^[0-9]{11}$');
+    if (!elevenDigits.test(parseInt(digit))) {
+        return {
+            msg: 'invalid',
+            reason: 'Must be eleven digits'
+        }
+    }
+    return {
+        digits: parseInt(digit),
+        d1: parseInt(dayNumber(digit)[0]),
+        d2: parseInt(dayNumber(digit)[1]),
+        m1: parseInt(monthNumber(digit)[0]),
+        m2: parseInt(monthNumber(digit)[1]),
+        y1: parseInt(yearNumber(digit)[0]),
+        y2: parseInt(yearNumber(digit)[1]),
+        i1: parseInt(individualNumber(digit)[0]),
+        i2: parseInt(individualNumber(digit)[1]),
+        i3: parseInt(individualNumber(digit)[2]),
+        k1: kontrollDigit1(digit),
+        k2: kontrollDigit2(digit),
+        isBorn: individualNumberValidation(digit).born,
+        isSex: isSex(digit)
+    }
+};
 
 const arrayEquals = (left, right) => {
     const { isArray } = Array;
@@ -118,7 +127,7 @@ const arrayEquals = (left, right) => {
 const checkSum = (digit) => {
     // 1. Array for input of birth digit
     // 2. Array for checkSum calculation
-    const input = [validateBirthNumber(digit).digits];
+    const input = [validate(digit).digits];
     const checkSum = [];
 
     // Manipulating input birth digit 
@@ -126,17 +135,17 @@ const checkSum = (digit) => {
     const split = toString.split('');
     const toNumberArr = Array.from(split, Number)
 
-    const d1 = parseInt(dayNumber(digit)[0])
-    const d2 = parseInt(dayNumber(digit)[1])
-    const m1 = parseInt(monthNumber(digit)[0])
-    const m2 = parseInt(monthNumber(digit)[1])
-    const y1 = parseInt(yearNumber(digit)[0])
-    const y2 = parseInt(yearNumber(digit)[1])
-    const i1 = parseInt(individualNumber(digit)[0])
-    const i2 = parseInt(individualNumber(digit)[1])
-    const i3 = parseInt(individualNumber(digit)[2])
-    const k1 = kontrollDigit1(digit);
-    const k2 = kontrollDigit2(digit);
+    const d1 = validate(input).d1
+    const d2 = validate(input).d2
+    const m1 = validate(input).m1
+    const m2 = validate(input).m2
+    const y1 = validate(input).y1
+    const y2 = validate(input).y2
+    const i1 = validate(input).i1
+    const i2 = validate(input).i2
+    const i3 = validate(input).i3
+    const k1 = validate(input).k1
+    const k2 = validate(input).k2
 
     checkSum.unshift(d1, d2, m1, m2, y1, y2, i1, i2, i3, k1, k2);
 
@@ -151,7 +160,7 @@ export {
     individualNumber,
     kontrollDigit1,
     kontrollDigit2,
-    validateBirthNumber,
+    validate,
     isSex,
     individualNumberValidation,
     checkSum
